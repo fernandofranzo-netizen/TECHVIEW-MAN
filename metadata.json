@@ -1,0 +1,7 @@
+{
+  "name": "TechView CAD & Imagens Técnicas",
+  "description": "Aplicativo para consulta organizada de fotos e desenhos técnicos com suporte a zoom de alta resolução, modo offline e exportação em PDF.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
