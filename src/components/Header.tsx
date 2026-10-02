@@ -121,11 +121,11 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 type="button"
                 onClick={() => onOpenDriveSearch(searchQuery)}
-                title="Buscar diretamente no banco de dados techview_database.json do Drive (Enter)"
+                title="Consultar diretamente no banco de dados techview_database.json do Drive (Enter)"
                 className="px-2 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white font-semibold text-[10px] flex items-center gap-1 transition cursor-pointer shadow-2xs"
               >
                 <Database className="w-2.5 h-2.5" />
-                <span>Drive</span>
+                <span>Consultar Banco</span>
               </button>
             )}
 

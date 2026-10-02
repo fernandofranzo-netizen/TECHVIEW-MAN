@@ -55,9 +55,14 @@ export default function App() {
   const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
   const [isSimulatedOffline, setIsSimulatedOffline] = useState<boolean>(false);
 
-  // Documents & Storage State
-  const [documents, setDocuments] = useState<TechnicalDocument[]>([]);
-  const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(null);
+  // Documents & Storage State (seeded with baseline engineering drawings)
+  const [documents, setDocuments] = useState<TechnicalDocument[]>(() => {
+    return SAMPLE_DOCUMENTS.filter((d) => isNumberedCategory(d.category));
+  });
+  const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(() => {
+    const baseline = SAMPLE_DOCUMENTS.filter((d) => isNumberedCategory(d.category));
+    return baseline[0]?.id || null;
+  });
   const [isUploadModalOpen, setIsUploadModalOpen] = useState<boolean>(false);
 
   // Subscribe to Google Drive auth changes
@@ -405,12 +410,12 @@ export default function App() {
   const documentsRef = useRef(documents);
   documentsRef.current = documents;
 
-  // Automatic Drive Category Sync Handler (100% Background & Automatic)
+  // Consulta ao acervo de categorias no Drive sob demanda
   const handleSyncDriveCategories = useCallback(async (silent = false) => {
     if (!driveAuthState.isAuthenticated || !driveAuthState.accessToken) {
       if (!silent) {
         setIsDriveModalOpen(true);
-        showToast('Conecte sua conta do Google Drive para sincronizar as pastas automaticamente.', 'info');
+        showToast('Conecte sua conta do Google Drive para consultar os desenhos do banco de dados.', 'info');
       }
       return;
     }
@@ -424,58 +429,44 @@ export default function App() {
         await OfflineStorageService.saveDocument(doc);
       }
 
-      setDocuments(result.documents);
+      if (result.documents && result.documents.length > 0) {
+        setDocuments(result.documents);
+        setSelectedDocumentId((prev) => {
+          if (prev && result.documents.some((d) => d.id === prev)) return prev;
+          return result.documents[0]?.id || null;
+        });
+      }
       setCategoryDriveStats(result.categoryStats);
       setLastDriveSyncTime(result.updatedAt);
       localStorage.setItem('techview_last_drive_sync', result.updatedAt);
 
       if (!silent) {
         showToast(
-          `Sincronização concluída! ${result.totalDriveFiles} arquivos indexados nas categorias do Google Drive.`,
+          `Consulta concluída! ${result.totalDriveFiles} arquivos indexados no banco do Google Drive.`,
           'success'
         );
       } else if (result.newFilesCount > 0) {
         showToast(
-          `${result.newFilesCount} novo(s) documento(s) sincronizado(s) automaticamente do Google Drive!`,
+          `${result.newFilesCount} novo(s) documento(s) localizado(s) no Google Drive!`,
           'success'
         );
       }
     } catch (error: any) {
-      console.warn('Erro ao sincronizar categorias do Drive:', error);
+      console.warn('Erro ao consultar categorias do Drive:', error);
       if (!silent) {
-        showToast(`Falha na sincronização do Google Drive: ${error.message || error}`, 'warning');
+        showToast(`Falha ao consultar banco do Google Drive: ${error.message || error}`, 'warning');
       }
     } finally {
       setIsAutoSyncingDrive(false);
     }
   }, [driveAuthState.isAuthenticated, driveAuthState.accessToken]);
 
-  // Auto-sync whenever user logs in or auth credentials become valid
+  // Sincronização inicial sob demanda apenas se o acervo local estiver vazio
   useEffect(() => {
-    if (driveAuthState.isAuthenticated && driveAuthState.accessToken) {
+    if (driveAuthState.isAuthenticated && driveAuthState.accessToken && documents.length === 0) {
       handleSyncDriveCategories(true);
     }
-  }, [driveAuthState.isAuthenticated, driveAuthState.accessToken, handleSyncDriveCategories]);
-
-  // Background sync on window focus (e.g. user returns from Drive tab)
-  useEffect(() => {
-    const handleFocus = () => {
-      if (driveAuthState.isAuthenticated && driveAuthState.accessToken && !isAutoSyncingDrive) {
-        handleSyncDriveCategories(true);
-      }
-    };
-    window.addEventListener('focus', handleFocus);
-    return () => window.removeEventListener('focus', handleFocus);
-  }, [driveAuthState.isAuthenticated, driveAuthState.accessToken, isAutoSyncingDrive, handleSyncDriveCategories]);
-
-  // Periodic automatic sync every 30 seconds
-  useEffect(() => {
-    if (!driveAuthState.isAuthenticated) return;
-    const interval = setInterval(() => {
-      handleSyncDriveCategories(true);
-    }, 30000);
-    return () => clearInterval(interval);
-  }, [driveAuthState.isAuthenticated, handleSyncDriveCategories]);
+  }, [driveAuthState.isAuthenticated, driveAuthState.accessToken, documents.length, handleSyncDriveCategories]);
 
   const handleExportCurrentPDF = async () => {
     if (!currentDocument) return;

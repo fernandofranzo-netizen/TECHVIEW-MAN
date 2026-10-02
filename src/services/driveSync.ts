@@ -7,6 +7,7 @@ import {
   isNumberedCategory,
   isUpperCaseCategory
 } from '../types';
+import { SAMPLE_DOCUMENTS } from '../data/sampleDocuments';
 import { getAccessToken, clearStoredToken, getStoredAccount } from './googleAuth';
 
 export const DRIVE_ROOT_FOLDER_NAME = 'CONSULTA IMAGENS E DESENHO TÉCNICO';
@@ -551,6 +552,12 @@ export const DriveSyncService = {
           mergedDocuments.push(doc);
         }
       });
+    }
+
+    // Never return an empty document array; always retain the baseline engineering drawings
+    if (mergedDocuments.length === 0) {
+      const baseline = SAMPLE_DOCUMENTS.filter((d) => isNumberedCategory(d.category));
+      mergedDocuments.push(...baseline);
     }
 
     const updatedAt = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });

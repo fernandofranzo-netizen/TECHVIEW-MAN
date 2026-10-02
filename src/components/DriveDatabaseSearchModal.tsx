@@ -90,16 +90,16 @@ export const DriveDatabaseSearchModal: React.FC<DriveDatabaseSearchModalProps> =
       if (payload && payload.documents && payload.documents.length > 0) {
         onRestoreDocuments(payload.documents);
         setSearchResults(payload.documents);
-        onNotify(`Banco de dados do Drive atualizado! ${payload.documents.length} pranchas carregadas.`, 'success');
+        onNotify(`Banco de dados do Drive consultado! ${payload.documents.length} pranchas carregadas.`, 'success');
       } else {
-        // Fallback: sync all folder categories
+        // Fallback: load folder categories
         const res = await DriveSyncService.syncAllCategoriesWithDrive(documents);
         onRestoreDocuments(res.documents);
         setSearchResults(res.documents);
-        onNotify(`Pastas do Drive sincronizadas com ${res.totalDriveFiles} arquivos indexados.`, 'success');
+        onNotify(`Banco de dados consultado: ${res.totalDriveFiles} arquivos indexados.`, 'success');
       }
     } catch (err: any) {
-      onNotify(`Banco de dados indexado: ${documents.length} pranchas disponíveis.`, 'info');
+      onNotify(`Banco de dados: ${documents.length} pranchas disponíveis para consulta.`, 'info');
     } finally {
       setIsSyncingDb(false);
     }
@@ -132,7 +132,7 @@ export const DriveDatabaseSearchModal: React.FC<DriveDatabaseSearchModalProps> =
                 </span>
               </h3>
               <p className="text-xs text-zinc-500">
-                Pesquise por código do desenho (ex: DWG-104), máquina, ou cole um link direto do Drive.
+                Consulta direta no banco: busque por código (ex: DWG-104), máquina, ou cole um link do Drive.
               </p>
             </div>
           </div>
@@ -141,11 +141,11 @@ export const DriveDatabaseSearchModal: React.FC<DriveDatabaseSearchModalProps> =
             <button
               onClick={handleSyncDatabaseFromDrive}
               disabled={isSyncingDb}
-              title="Carregar banco techview_database.json mais recente do Drive"
+              title="Consultar banco techview_database.json mais recente do Drive"
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 transition cursor-pointer disabled:opacity-50"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isSyncingDb ? 'animate-spin text-blue-500' : ''}`} />
-              <span className="hidden sm:inline">Sincronizar Banco</span>
+              <span className="hidden sm:inline">Consultar Banco</span>
             </button>
             <button
               onClick={onClose}
@@ -235,10 +235,10 @@ export const DriveDatabaseSearchModal: React.FC<DriveDatabaseSearchModalProps> =
                 <Search className="w-6 h-6" />
               </div>
               <h4 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-                {hasSearched ? 'Nenhum desenho encontrado no banco para esta busca' : 'Digite para buscar desenhos no banco de dados'}
+                {hasSearched ? 'Nenhum desenho encontrado no banco para esta busca' : 'Consulte desenhos diretamente no banco de dados'}
               </h4>
               <p className="text-xs text-zinc-500 max-w-md mx-auto">
-                Tente buscar pelo código do desenho (ex: <code className="font-mono bg-zinc-200 dark:bg-zinc-800 px-1 py-0.5 rounded">DWG</code>, <code className="font-mono bg-zinc-200 dark:bg-zinc-800 px-1 py-0.5 rounded">ROT</code>, <code className="font-mono bg-zinc-200 dark:bg-zinc-800 px-1 py-0.5 rounded">KMP</code>), nome da máquina ou cole a URL de um arquivo no Drive.
+                A consulta ao banco de dados no Google Drive é contínua. Digite o código do desenho (ex: <code className="font-mono bg-zinc-200 dark:bg-zinc-800 px-1 py-0.5 rounded">DWG</code>, <code className="font-mono bg-zinc-200 dark:bg-zinc-800 px-1 py-0.5 rounded">ROT</code>, <code className="font-mono bg-zinc-200 dark:bg-zinc-800 px-1 py-0.5 rounded">KMP</code>), nome da máquina ou cole a URL de um arquivo no Drive.
               </p>
               <div className="pt-2">
                 <button
@@ -247,7 +247,7 @@ export const DriveDatabaseSearchModal: React.FC<DriveDatabaseSearchModalProps> =
                   className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl shadow-xs transition cursor-pointer"
                 >
                   <RefreshCw className={`w-3.5 h-3.5 ${isSyncingDb ? 'animate-spin' : ''}`} />
-                  <span>Sincronizar Arquivo techview_database.json do Drive</span>
+                  <span>Consultar Banco de Dados techview_database.json</span>
                 </button>
               </div>
             </div>

@@ -309,7 +309,7 @@ export const DriveSyncModal: React.FC<DriveSyncModalProps> = ({
             </div>
             <div>
               <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <span>Sincronização com Google Drive</span>
+                <span>Acesso ao Banco de Dados Google Drive</span>
                 {authState.isAuthenticated && (
                   <span className="flex items-center gap-1 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
                     <CheckCircle2 className="w-3 h-3" /> Conectado
@@ -317,7 +317,7 @@ export const DriveSyncModal: React.FC<DriveSyncModalProps> = ({
                 )}
               </h3>
               <p className="text-xs text-zinc-500">
-                Sincronize as categorias técnicas em letra maiúscula automaticamente com a pasta oficial.
+                Consulta direta e contínua aos arquivos de desenhos e categorias técnicas no Google Drive.
               </p>
             </div>
           </div>
@@ -349,7 +349,7 @@ export const DriveSyncModal: React.FC<DriveSyncModalProps> = ({
                   {DEFAULT_PERMANENT_EMAIL}
                 </p>
                 <p className="text-xs text-zinc-500 mt-1 leading-relaxed">
-                  Esta conta Google está designada permanentemente para este projeto. Ao conectar, a sessão é preservada de forma contínua com sincronização automática a cada 30 segundos das categorias técnicas (<span className="font-semibold text-zinc-800 dark:text-zinc-200">"{DRIVE_ROOT_FOLDER_NAME}"</span>).
+                  Esta conta Google está conectada permanentemente ao projeto. Não há necessidade de sincronizações periódicas ou manuais: a consulta ao banco de dados e arquivos de desenhos técnicos é realizada de forma direta e contínua.
                 </p>
               </div>
 
@@ -423,8 +423,8 @@ export const DriveSyncModal: React.FC<DriveSyncModalProps> = ({
                     Pasta Raiz no Drive: <span className="font-mono-tech font-bold">"{DRIVE_ROOT_FOLDER_NAME}"</span>
                   </div>
                   <div className="text-[11px] text-blue-800 dark:text-blue-300/80 mt-0.5">
-                    Sincronização automática ativa • {localDocuments.length} itens catalogados
-                    {lastSyncTime && ` • Última atualização: hoje às ${lastSyncTime}`}
+                    Conexão direta ativa • {localDocuments.length} itens catalogados no banco
+                    {lastSyncTime && ` • Última consulta: hoje às ${lastSyncTime}`}
                   </div>
                 </div>
               </div>
@@ -440,7 +440,7 @@ export const DriveSyncModal: React.FC<DriveSyncModalProps> = ({
                       Banco de Dados no Drive (techview_database.json)
                     </h5>
                     <p className="text-[11px] text-blue-800 dark:text-blue-300">
-                      Pesquise desenhos por código (ex: DWG-104), máquina ou importe links de desenhos do Drive.
+                      Consulte desenhos por código (ex: DWG-104), máquina ou importe links de desenhos do Drive.
                     </p>
                   </div>
                 </div>
@@ -453,7 +453,7 @@ export const DriveSyncModal: React.FC<DriveSyncModalProps> = ({
                     className="w-full sm:w-auto px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 transition cursor-pointer shadow-xs shrink-0"
                   >
                     <Search className="w-3.5 h-3.5" />
-                    <span>Buscar no Banco</span>
+                    <span>Consultar Banco</span>
                   </button>
                 )}
               </div>
@@ -466,7 +466,7 @@ export const DriveSyncModal: React.FC<DriveSyncModalProps> = ({
                     <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
                       <span>Categorias no Google Drive</span>
                       <span className="px-1.5 py-0.2 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                        Sincronização Automática
+                        Conexão Direta
                       </span>
                     </span>
                   </div>
@@ -478,12 +478,12 @@ export const DriveSyncModal: React.FC<DriveSyncModalProps> = ({
                     className="text-xs px-2.5 py-1 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-200 font-medium rounded-lg transition flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
                   >
                     <RefreshCw className={`w-3 h-3 ${isSyncingCategories || isAutoSyncing ? 'animate-spin text-blue-500' : ''}`} />
-                    <span>{isSyncingCategories || isAutoSyncing ? 'Sincronizando...' : 'Verificar Agora'}</span>
+                    <span>{isSyncingCategories || isAutoSyncing ? 'Consultando...' : 'Consultar Agora'}</span>
                   </button>
                 </div>
 
                 <p className="text-[11px] text-zinc-500 leading-snug">
-                  Qualquer imagem, PDF ou desenho técnico inserido em uma destas pastas dentro de <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">"{DRIVE_ROOT_FOLDER_NAME}"</span> é sincronizado automaticamente e em segundo plano a cada 30 segundos:
+                  Pastas técnicas mapeadas na pasta <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">"{DRIVE_ROOT_FOLDER_NAME}"</span> no Google Drive. As buscas e consultas são feitas diretamente no banco de dados e arquivos:
                 </p>
 
                 {/* Subfolder list with live counters */}

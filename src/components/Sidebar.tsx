@@ -245,7 +245,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               ) : (
                 <div 
                   onClick={onOpenDriveModal}
-                  title="Sincronização 100% automática ativa para a conta permanente. Clique para detalhes."
+                  title="Conexão direta permanente ativa com o banco de dados do Google Drive. Consulta contínua."
                   className="p-2.5 rounded-xl bg-emerald-500/10 dark:bg-emerald-950/30 border border-emerald-500/25 flex items-center justify-between text-[11px] cursor-pointer hover:bg-emerald-500/15 transition group"
                 >
                   <div className="truncate flex items-center gap-2 text-zinc-700 dark:text-zinc-200">
@@ -255,7 +255,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     </span>
                     <div className="truncate flex flex-col">
                       <span className="font-semibold text-[11px] text-emerald-700 dark:text-emerald-400 leading-tight flex items-center gap-1">
-                        <span>Auto-Sync Ativo</span>
+                        <span>Banco Conectado</span>
                         <span title="Vínculo Permanente">
                           <ShieldCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                         </span>
@@ -265,7 +265,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         {driveUserEmail || 'manutencaolaminor@gmail.com'}
                       </span>
                       <span className="text-[9px] text-zinc-400 truncate">
-                        {isAutoSyncing ? 'Sincronizando pranchas do Drive...' : (lastSyncTime ? `Atualizado: ${lastSyncTime}` : 'Conexão permanente ativa')}
+                        {isAutoSyncing ? 'Consultando banco de dados...' : 'Consulta contínua em tempo real'}
                       </span>
                     </div>
                   </div>
